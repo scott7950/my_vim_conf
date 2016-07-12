@@ -1,3 +1,8 @@
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/gvimrc_example.vim
+
+" run before loading scripts from .vim/bundle, 
+" which will load systemverilog match script
 runtime plugin/vimballPlugin.vim
 runtime macros/matchit.vim
 runtime plugin/AlignPlugin.vim
@@ -14,6 +19,15 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'nachumk/systemverilog.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'hari-rangarajan/CCTree'
+Plugin 'giraldeau/ccglue'
+"Plugin 'vim-scripts/cscope.vim'
+Plugin 'amal-khailtash/vim-ralf-syntax'
+""Plugin 'xmementoit/vim-ide'
+Plugin 'fatih/vim-go'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'rust-lang/rust.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -46,12 +60,10 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 "
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/gvimrc_example.vim
 
 set ai
-set ts=4
-set sw=4
+set ts=2
+set sw=2
 set nu
 set nobackup
 set incsearch
@@ -63,16 +75,6 @@ set expandtab
 colo desert
 set guifont=Monospace
 
-"if
-"hi Visual guifg=NONE
-"el
-"hi Normal guifg=White guibg=Black
-"hi NonText guibg=Black
-"hi Constant guifg=Lightred guibg=Black
-"hi Special guifg=Orange guibg=Black
-"hi search guibg=Darkcyan
-"en
-
 syntax on
 
 aug filesyntax
@@ -80,32 +82,56 @@ aug filesyntax
     au BufNewFile,BufRead *.log,*.db set filetype=systemverilog
     au BufRead,BufNewFile *.v,*.vh,*.sv,*.svh,*.svi,*.sva set ft=systemverilog
     au BufRead,BufNewFile Makefile,makefile setf=makefile
+    au BufRead,BufNewFile *.whd set ft=vhdl
     "au BufRead,BufNewFile *.sc,*.sch setf=systemc
 aug END
 
 "au BufReadPost *.log normal G
 autocmd FileType make setlocal noexpandtab
+let g:NERDTreeDirArrows=0
+
+let g:nerdtree_tabs_open_on_gui_startup=0
+let g:nerdtree_tabs_smart_startup_focus=1
 
 filetype plugin indent on
 
 map <F2> :tabnew<CR>
-map <F3> :NERDTree<CR>
+map <F3> :NERDTreeMirrorOpen<CR>
 map <C-left> :tabprevious<CR>
 map <C-right> :tabnext<CR>
 
 map <C-c> "*y
 map <C-p> "*p
+nnoremap gf <C-W>gf
+vnoremap gf <C-W>gf
 
 set guitablabel=\[%N\]\ %t\ %M
 "set guifont=Courier\ 10
 
-set statusline=
-set statusline+=%<\                       " cut at start
-set statusline+=%2*[%n%H%M%R%W]%*\        " flags and buf no
-set statusline+=%-40f\                    " path
-set statusline+=%=%1*%y%*%*\              " file type
-set statusline+=%10((%l,%c)%)\            " line and column
-set statusline+=%P                        " percentage of file
+""""""""""""""""""""""""""""""
+" => Status line
+""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    endif
+    return ''
+endfunction
+
+"set statusline=
+"set statusline+=%<\                       " cut at start
+"set statusline+=%2*[%n%H%M%R%W]%*\        " flags and buf no
+"set statusline+=%-40f\                    " path
+"set statusline+=%=%1*%y%*%*\              " file type
+"set statusline+=%10((%l,%c)%)\            " line and column
+"set statusline+=%P                        " percentage of file
 
 "set statusline=   " clear the statusline for when vimrc is reloaded
 "set statusline+=%-3.3n\                      " buffer number
