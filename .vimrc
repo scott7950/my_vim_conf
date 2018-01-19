@@ -20,14 +20,16 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'nachumk/systemverilog.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'hari-rangarajan/CCTree'
-Plugin 'giraldeau/ccglue'
+"Plugin 'hari-rangarajan/CCTree'
+"Plugin 'giraldeau/ccglue'
 "Plugin 'vim-scripts/cscope.vim'
 Plugin 'amal-khailtash/vim-ralf-syntax'
 ""Plugin 'xmementoit/vim-ide'
-Plugin 'fatih/vim-go'
+"Plugin 'fatih/vim-go'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'rust-lang/rust.vim'
+Plugin 'vim-scripts/Mark--Karkat'
+"Plugin 'vim-scripts/FuzzyFinder'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -71,18 +73,20 @@ set ic
 set smartcase
 set winminheight=0
 set expandtab
-
-colo desert
+set wildmenu
+set wildmode=longest:full,full
 set guifont=Monospace
+colo desert
 
 syntax on
 
 aug filesyntax
     au BufNewFile,BufRead *.ini,*.tcl,*.ralf set filetype=tcl
     au BufNewFile,BufRead *.log,*.db set filetype=systemverilog
-    au BufRead,BufNewFile *.v,*.vh,*.sv,*.svh,*.svi,*.sva set ft=systemverilog
+    au BufRead,BufNewFile *.jv,*.v,*.vh,*.sv,*.svh,*.svi,*.sva set ft=systemverilog
     au BufRead,BufNewFile Makefile,makefile setf=makefile
     au BufRead,BufNewFile *.whd set ft=vhdl
+    au BufRead,BufNewFile *.cjpp setf=cpp
     "au BufRead,BufNewFile *.sc,*.sch setf=systemc
 aug END
 
@@ -104,6 +108,17 @@ map <C-c> "*y
 map <C-p> "*p
 nnoremap gf <C-W>gf
 vnoremap gf <C-W>gf
+map <F4> :Explore<CR>
+"cmap E Explore
+
+if v:version > 703
+  "" tell it to use an undo file
+  "set undofile
+  "" set a directory to store the undo history
+  "set undodir=/homes/weichunxu/.vimundo/
+  
+  set hidden
+endif
 
 set guitablabel=\[%N\]\ %t\ %M
 "set guifont=Courier\ 10
@@ -160,3 +175,8 @@ endfunction
 "        return ""
 "    endif
 "endfunction
+"
+"set shellcmdflag=-fc?
+
+"set undofile                " Save undo's after file closes
+"set undodir=$HOME/.vim/undo " where to save undo histories
